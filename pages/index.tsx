@@ -9,23 +9,23 @@ export default function Home() {
   const [date, setDate] = useState('');
 
   useEffect(() => {
-    setEvents(loadEvents());
+    loadEvents().then(setEvents);
   }, []);
 
-  const addEventHandler = (e: React.FormEvent) => {
+  const addEventHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     const newEvent = addEvent(title, date);
     const newEvents = [...events, newEvent];
     setEvents(newEvents);
-    saveEvents(newEvents);
+    await saveEvents(newEvents);
     setTitle('');
     setDate('');
   };
 
-  const removeEventHandler = (id: string) => {
+  const removeEventHandler = async (id: string) => {
     const updatedEvents = removeEvent(events, id);
     setEvents(updatedEvents);
-    saveEvents(updatedEvents);
+    await saveEvents(updatedEvents);
   };
 
   return (

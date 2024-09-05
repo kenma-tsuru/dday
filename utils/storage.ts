@@ -1,3 +1,6 @@
+import { API_URL } from './config';
+import axios from 'axios';
+
 export interface Event {
   id: string; // Add an id field for easier removal
   title: string;
@@ -5,18 +8,13 @@ export interface Event {
   creationDate: string;
 }
 
-export function saveEvents(events: Event[]): void {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('events', JSON.stringify(events));
-  }
+export async function saveEvents(events: Event[]): Promise<void> {
+  await axios.post(`${API_URL}/events`, events);
 }
 
-export function loadEvents(): Event[] {
-  if (typeof window !== 'undefined') {
-    const data = localStorage.getItem('events');
-    return data ? JSON.parse(data) : [];
-  }
-  return [];
+export async function loadEvents(): Promise<Event[]> {
+  const response = await axios.get(`${API_URL}/events`);
+  return response.data;
 }
 
 export function addEvent(title: string, date: string): Event {
